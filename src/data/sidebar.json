@@ -1,0 +1,26 @@
+{
+    "sidebar": {
+      "logo": "/logo.png",
+      "title": "RapidBy",
+      "links": [
+        {
+          "label": "Home",
+          "icon": "/icons/home.svg",
+          "path": "/admin/dashboard/"
+        },
+        {
+          "label": "Products",
+          "icon": "/icons/products.svg",
+          "path": "/admin/dashboard/products"
+        },
+        {
+          "label": "Orders",
+          "icon": "/icons/orders.svg",
+          "path": "/admin/dashboard/orders"
+        }
+      ],
+      "logoutIcon": "/icons/logout.svg",
+      "logoutTitle": "Logout"
+    }
+  }
+  
