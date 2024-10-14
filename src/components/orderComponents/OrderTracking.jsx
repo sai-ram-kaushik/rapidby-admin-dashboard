@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../utils/Button";
+import Button from '../../utils/Button'
 import searchIcon from "/icons/search.svg";
 import axios from "axios";
 import moment from "moment-timezone";
 import { useDebounce } from "../../hooks/useDebounce";
+import OrderTrackingDetails from "./OrderTrackingDetails";
 
 const OrderTracking = () => {
   const [orders, setOrders] = useState([]);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
     axios
@@ -44,9 +46,14 @@ const OrderTracking = () => {
 
   const handleStatusUpdate = (orderId, newStatus) => {
     axios
-      .put(`${import.meta.env.VITE_APP_API_ENDPOINT}/api/store/update-order-details/${orderId}`, {
-        status: newStatus,
-      })
+      .put(
+        `${
+          import.meta.env.VITE_API_ENDPOINT_URI
+        }/api/store/update-order-details/${orderId}`,
+        {
+          status: newStatus,
+        }
+      )
       .then((response) => {
         const updatedOrders = orders.map((order) =>
           order._id === orderId ? { ...order, status: newStatus } : order
@@ -65,36 +72,19 @@ const OrderTracking = () => {
       order.firstName.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
   );
 
+  const handleViewDetails = (order) => {
+    setSelectedOrder(order);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedOrder(null);
+  };
+
   return (
-    <div className="w-full">
-      <div className="flex flex-col items-start bg-background rounded-lg w-full p-5">
-        <div className="flex items-center justify-center gap-4 w-full">
-          <Button title="Export" />
-        </div>
-
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-4">
-            <p>All</p>
-            <p>Pending</p>
-            <p>In queue</p>
-            <p>Ready to deliver</p>
-            <p>Delivered</p>
-          </div>
-
-          <div className="flex max-w-[290px] gap-2 bg-gray-100 p-2 rounded-xl">
-            <img src={searchIcon} alt="Search" />
-            <input
-              type="search"
-              className="bg-transparent outline-none"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <table className="min-w-full divide-y divide-gray-200 mt-5">
-          <thead className="">
+    <div className="w-[350px] sm:w-full bg-background p-5 rounded-xl">
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm text-left bg-white">
+          <thead className="text-xs uppercase">
             <tr>
               <th
                 scope="col"
@@ -130,12 +120,6 @@ const OrderTracking = () => {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Amount
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
                 Status
               </th>
               <th
@@ -148,19 +132,26 @@ const OrderTracking = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredOrders.map((order, index) => (
-              <tr key={index}>
+              <tr
+                key={index}
+                onClick={() => handleViewDetails(order)}
+                className="cursor-pointer"
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
                   #{order._id.slice(16, 23)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {order.firstName}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{order.product}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {order.items.map((item, idx) => (
+                    <p>{item.name}</p>
+                  ))}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{order.email}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {formatToIST(order.createdAt)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{order.amount}</td>
                 <td
                   className={`px-6 py-4 whitespace-nowrap ${getStatusClass(
                     order.status
@@ -169,38 +160,21 @@ const OrderTracking = () => {
                   {order.status}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap relative">
-                  <button
-                    className="text-indigo-600 hover:text-indigo-900"
-                    onClick={() =>
-                      setActiveDropdown(activeDropdown === index ? null : index)
-                    }
-                  >
+                  <button className="text-indigo-600 hover:text-indigo-900">
                     ...
                   </button>
-                  {activeDropdown === index && (
-                    <div className="absolute bg-white shadow-lg rounded-md p-2 mt-1 z-10">
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() =>
-                          handleStatusUpdate(order._id, "Processing")
-                        }
-                      >
-                        Processing
-                      </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleStatusUpdate(order._id, "Shipped")}
-                      >
-                        Shipped
-                      </button>
-                    </div>
-                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {selectedOrder && (
+        <OrderTrackingDetails
+          order={selectedOrder}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

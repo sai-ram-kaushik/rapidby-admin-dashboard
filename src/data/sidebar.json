@@ -1,26 +1,40 @@
 {
-    "sidebar": {
-      "logo": "/logo.png",
-      "title": "RapidBy",
-      "links": [
-        {
-          "label": "Home",
-          "icon": "/icons/home.svg",
-          "path": "/admin/dashboard/"
-        },
-        {
-          "label": "Products",
-          "icon": "/icons/products.svg",
-          "path": "/admin/dashboard/products"
-        },
-        {
-          "label": "Orders",
-          "icon": "/icons/orders.svg",
-          "path": "/admin/dashboard/orders"
-        }
-      ],
-      "logoutIcon": "/icons/logout.svg",
-      "logoutTitle": "Logout"
-    }
+  "sidebar": {
+    "logo": "/logo.png",
+    "title": "RapidBy",
+    "links": [
+      {
+        "label": "Home",
+        "icon": "/icons/home.svg",
+        "path": "/admin/dashboard/"
+      },
+      {
+        "label": "Products",
+        "icon": "/icons/products.svg",
+        "path": "/admin/dashboard/products"
+      },
+      {
+        "label": "Orders",
+        "icon": "/icons/orders.svg",
+        "path": "/admin/dashboard/orders"
+      },
+      {
+        "label": "Report",
+        "icon": "/icons/report.svg",
+        "path": "/admin/dashboard/report"
+      },
+      {
+        "label": "Custom Designs",
+        "icon": "/icons/custom.svg",
+        "path": "/admin/dashboard/custom-design"
+      },
+      {
+        "label": "Customer Support",
+        "icon": "/icons/customer.svg",
+        "path": "/admin/dashboard/customer-support"
+      }
+    ],
+    "logoutIcon": "/icons/logout.svg",
+    "logoutTitle": "Logout"
   }
-  
+}

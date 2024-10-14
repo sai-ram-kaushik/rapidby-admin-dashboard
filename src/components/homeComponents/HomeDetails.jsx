@@ -8,15 +8,16 @@ const HomeDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_ENDPOINT_URI}api/admin/product-count`)
+      .get(`http://localhost:8000/api/admin/get-catalogs-count`)
       .then((response) => {
         setCount(response.data.data);
+        console.log(response.data.data);
       });
   }, []);
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_ENDPOINT_URI}api/users/get-users-count`)
+      .get(`${import.meta.env.VITE_API_ENDPOINT_URI}/api/users/get-users-count`)
       .then((response) => {
         setUserCount(response.data.data);
       })
@@ -41,7 +42,7 @@ const HomeDetails = () => {
               <img src={totalProduct.arrowIcon} />
             </div>
             <div className="flex items-center gap-2">
-              <h3 className="text-[56px] font-bold">{totalProduct.totalNumber}</h3>
+              <h3 className="text-[56px] font-bold">{count}</h3>
               <div className="flex flex-col items-start">
                 <p>10 New products</p>
                 <p>added last month</p>
@@ -81,7 +82,9 @@ const HomeDetails = () => {
               <img src={totalCustomer.arrowIcon} />
             </div>
             <div className="flex items-center gap-2">
-              <h3 className="text-[56px] font-bold">{totalCustomer.totalNumber}</h3>
+              <h3 className="text-[56px] font-bold">
+                {totalCustomer.totalNumber}
+              </h3>
               <div className="flex flex-col items-start">
                 <p>10 New products</p>
                 <p>added last month</p>
