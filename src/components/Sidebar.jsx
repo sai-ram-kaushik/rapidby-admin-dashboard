@@ -23,10 +23,12 @@ const Sidebar = ({ sidebar }) => {
       <div>
         <ToastContainer />
         <div className="flex flex-col items-start gap-5">
-          <div className="flex items-center gap-2">
-            <img src={logo} width={24} height={21} alt="Logo" />
-            <p className="text-secondary text-[24px] font-bold">{title}</p>
-          </div>
+          <Link to="/admin/dashboard">
+            <div className="flex items-center gap-2">
+              <img src={logo} width={24} height={21} alt="Logo" />
+              <p className="text-secondary text-[24px] font-bold">{title}</p>
+            </div>
+          </Link>
 
           <div className="flex flex-col items-start gap-4">
             {links.map((link, index) => (
